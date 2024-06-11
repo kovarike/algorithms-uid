@@ -1,0 +1,21 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --trace-warnings src/index.js",
+    "prettier": "prettier --write src/**/*.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.3.2"
+  },
+  "dependencies": {
+    "@kovarike/cocc": "^1.7.0",
+    "uuidv4": "^6.2.13"
+  }
+}
