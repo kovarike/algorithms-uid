@@ -1,24 +1,23 @@
 import { Token, Uid } from "@kovarike/cocc";
 
 export class Algorithms {
-  constructor() {
+  constructor(setHex, setBin) {
     this.bin = Uid();
     this.hex = Token();
     this.date = new Date();
-    this.set = new Set()
+    this.setHex = setHex;
+    this.setBin = setBin;
 
   }
 
   Hex() {
 
     const regex = {
-      hex: /(.{5})/g,
-      bin: /(?:^[a-f0-9]{8}-[a-f0-9]{4}-5[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12}$)|(?:^0{8}-0{4}-0{4}-0{4}-0{12}$)/u
+      hex: /(.{5})/g
     };
     
     const Schema = {
-      hex:  {pattern: regex.hex},
-      bin: {pattern: regex.bin}
+      hex:  {pattern: regex.hex}
     };
     
     const dateStrings = `${this.date.getDay()}${this.date.getMonth()}${this.date.getFullYear()}${this.date.getHours()}${this.date.getMinutes()}${this.date.getSeconds()}`;
@@ -26,11 +25,11 @@ export class Algorithms {
     const hexSequence = sequence.map((char) => char.charCodeAt(0).toString(32)).slice(0, 20);
     const hex = hexSequence.join('').toLocaleLowerCase().replace(Schema.hex.pattern, '$1-').slice(0, -1);
     
-    if(this.set.has(hex)){
+    if(this.setHex.has(hex)){
       return this.Hex();
     }else{
       const hex_date = `${hex}-${dateStrings}`;
-      this.set.add(hex_date);
+      this.setHex.add(hex_date);
       return hex_date;
 
     }
@@ -40,24 +39,25 @@ export class Algorithms {
   Bin() {
 
     const regex = {
-      hex: /(.{5})/g,
-      bin: /(?:^[a-f0-9]{8}-[a-f0-9]{4}-5[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12}$)|(?:^0{8}-0{4}-0{4}-0{4}-0{12}$)/u
+      bin: /(.{10})/u
     };
     
     const Schema = {
-      hex:  {pattern: regex.hex},
       bin: {pattern: regex.bin}
     };
     
     const dateStrings = `${this.date.getDay()}${this.date.getMonth()}${this.date.getFullYear()}${this.date.getHours()}${this.date.getMinutes()}${this.date.getSeconds()}`;
-    console.log(dateStrings)
-    const sequence = [...this.token, ...this.uid, dateStrings];
+    const sequence = [...this.bin];
+    const binSequence = sequence.map((char) => char.charCodeAt(0).toString()).slice(1, -2);
+    const bin = binSequence.join('').toLocaleLowerCase().replace(Schema.bin.pattern, '$1-').slice(0, -5);
+    if(this.setBin.has(bin)){
+      return this.Bin();
+    }else{
+      const bin_date = `${bin}-${dateStrings}`;
+      this.setBin.add(bin_date);
+      return bin_date;
 
-    const hexSequence = sequence.map((char) => char.charCodeAt(0).toString(32)).slice(0, 20);
-    const hex = hexSequence.join('').toLocaleLowerCase().replace(Schema.hex.pattern, '$1-').slice(0, -1);
-    this.set.add(hex)
-    console.log(this.set.has(hex), this.set)
-    return hex;
+    }
   }
 
 
